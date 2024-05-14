@@ -253,7 +253,7 @@ def check_version(
     return result
 
 
-def check_latest_pypi_version(package_name="vsensebox-ultralytics"):
+def check_latest_pypi_version(package_name="pyppbox-ultralytics"):
     """
     Returns the latest version of a PyPI package without downloading or installing it.
 
@@ -263,7 +263,7 @@ def check_latest_pypi_version(package_name="vsensebox-ultralytics"):
     Returns:
         (str): The latest version of the package.
     """
-    if package_name == 'vsensebox-ultralytics':
+    if package_name == 'pyppbox-ultralytics':
         with contextlib.suppress(Exception):
             requests.packages.urllib3.disable_warnings()  # Disable the InsecureRequestWarning
             response = requests.get(f'https://pypi.org/pypi/{package_name}/json', timeout=3)
@@ -271,8 +271,8 @@ def check_latest_pypi_version(package_name="vsensebox-ultralytics"):
                 return response.json()['info']['version']
     else:
         LOGGER.info(
-        f'This is custom vsensebox-ultralytics for VsenseBox 😃 '
-        f"🌐 Check for the update here: https://github.com/rathaumons/ultralytics-for-vsensebox")
+        f'This is custom pyppbox-ultralytics for pyppbox 😃 '
+        f"🌐 Check for the update here: https://github.com/rathaumons/ultralytics-for-pyppbox")
     return None
 
 
@@ -290,8 +290,8 @@ def check_pip_update_available():
             latest = check_latest_pypi_version()
             if check_version(__version__, f"<{latest}"):  # check if current version is < latest version
                 LOGGER.info(
-                    f"New https://pypi.org/project/vsensebox-ultralytics/{latest} available 😃 "
-                    f"Update with 'pip install -U vsensebox-ultralytics'"
+                    f"New https://pypi.org/project/pyppbox-ultralytics/{latest} available 😃 "
+                    f"Update with 'pip install -U pyppbox-ultralytics'"
                 )
                 return True
     return False
@@ -425,7 +425,14 @@ def check_torchvision():
     """
 
     # Compatibility table
-    compatibility_table = {"2.0": ["0.15"], "1.13": ["0.14"], "1.12": ["0.13"]}
+    compatibility_table = {
+        "2.3": ["0.18"],
+        "2.2": ["0.17"],
+        "2.1": ["0.16"],
+        "2.0": ["0.15"],
+        "1.13": ["0.14"],
+        "1.12": ["0.13"],
+    }
 
     # Extract only the major and minor versions
     v_torch = ".".join(torch.__version__.split("+")[0].split(".")[:2])
@@ -527,7 +534,7 @@ def check_is_path_safe(basedir, path):
     base_dir_resolved = Path(basedir).resolve()
     path_resolved = Path(path).resolve()
 
-    return path_resolved.is_file() and path_resolved.parts[: len(base_dir_resolved.parts)] == base_dir_resolved.parts
+    return path_resolved.exists() and path_resolved.parts[: len(base_dir_resolved.parts)] == base_dir_resolved.parts
 
 
 def check_imshow(warn=False):
