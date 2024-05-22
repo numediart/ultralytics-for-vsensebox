@@ -50,11 +50,10 @@ setup(
                  'pose estimation and image classification.'),
     long_description=README,
     long_description_content_type='text/markdown',
-    url='https://github.com/rathaumons/ultralytics-for-vsensebox',
+    url='https://github.com/numediart/ultralytics-for-vsensebox',
     project_urls={
-        'Bug Reports': 'https://github.com/rathaumons/ultralytics-for-vsensebox/issues',
-        'Funding': 'https://ultralytics.com',
-        'Source': 'https://github.com/rathaumons/ultralytics-for-vsensebox'},
+        'Bug Reports': 'https://github.com/numediart/ultralytics-for-vsensebox/issues',
+        'Source': 'https://github.com/numediart/ultralytics-for-vsensebox'},
     packages=['ultralytics'] + [str(x) for x in Path('ultralytics').rglob('*/') if x.is_dir() and '__' not in str(x)],
     package_data={
         '': ['*.yaml'],

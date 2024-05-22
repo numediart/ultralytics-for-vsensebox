@@ -253,7 +253,7 @@ def check_version(
     return result
 
 
-def check_latest_pypi_version(package_name="pyppbox-ultralytics"):
+def check_latest_pypi_version(package_name="vsensebox-ultralytics"):
     """
     Returns the latest version of a PyPI package without downloading or installing it.
 
@@ -263,7 +263,7 @@ def check_latest_pypi_version(package_name="pyppbox-ultralytics"):
     Returns:
         (str): The latest version of the package.
     """
-    if package_name == 'pyppbox-ultralytics':
+    if package_name == 'vsensebox-ultralytics':
         with contextlib.suppress(Exception):
             requests.packages.urllib3.disable_warnings()  # Disable the InsecureRequestWarning
             response = requests.get(f'https://pypi.org/pypi/{package_name}/json', timeout=3)
@@ -271,8 +271,8 @@ def check_latest_pypi_version(package_name="pyppbox-ultralytics"):
                 return response.json()['info']['version']
     else:
         LOGGER.info(
-        f'This is custom pyppbox-ultralytics for pyppbox 😃 '
-        f"🌐 Check for the update here: https://github.com/rathaumons/ultralytics-for-pyppbox")
+        f'This is custom vsensebox-ultralytics for vsensebox 😃 '
+        f"🌐 Check for the update here: https://github.com/numediart/ultralytics-for-vsensebox")
     return None
 
 
@@ -290,8 +290,8 @@ def check_pip_update_available():
             latest = check_latest_pypi_version()
             if check_version(__version__, f"<{latest}"):  # check if current version is < latest version
                 LOGGER.info(
-                    f"New https://pypi.org/project/pyppbox-ultralytics/{latest} available 😃 "
-                    f"Update with 'pip install -U pyppbox-ultralytics'"
+                    f"New https://pypi.org/project/vsensebox-ultralytics/{latest} available 😃 "
+                    f"Update with 'pip install -U vsensebox-ultralytics'"
                 )
                 return True
     return False
