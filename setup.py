@@ -66,6 +66,7 @@ setup(
             "streamlit", # visualizing with GUI
         ],
         'export': [
+            "numpy>=1.23.5",
             "onnx>=1.12.0", # ONNX export
             "coremltools>=7.0; platform_system != 'Windows' and python_version <= '3.11'", # CoreML supported on macOS and Linux
             "openvino>=2024.0.0", # OpenVINO export
@@ -73,7 +74,6 @@ setup(
             "tensorflowjs>=3.9.0", # TF.js export, automatically installs tensorflow
             "keras",  # not installed automatically by tensorflow>=2.16
             "flatbuffers>=23.5.26,<100; platform_machine == 'aarch64'", # update old 'flatbuffers' included inside tensorflow package
-            "numpy==1.23.5; platform_machine == 'aarch64'", # fix error: `np.bool` was a deprecated alias for the builtin `bool` when using TensorRT models on NVIDIA Jetson
             "h5py!=3.11.0; platform_machine == 'aarch64'", # fix h5py build issues due to missing aarch64 wheels in 3.11 release
         ],
         'extra': [
