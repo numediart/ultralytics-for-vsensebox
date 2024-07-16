@@ -66,7 +66,6 @@ setup(
             "streamlit", # visualizing with GUI
         ],
         'export': [
-            "numpy>=1.23.5",
             "onnx>=1.12.0", # ONNX export
             "coremltools>=7.0; platform_system != 'Windows' and python_version <= '3.11'", # CoreML supported on macOS and Linux
             "openvino>=2024.0.0", # OpenVINO export
