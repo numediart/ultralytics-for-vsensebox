@@ -50,13 +50,10 @@ setup(
     long_description=README,
     long_description_content_type='text/markdown',
     url='https://github.com/numediart/ultralytics-for-vsensebox',
-    project_urls={
-        'Bug Reports': 'https://github.com/numediart/ultralytics-for-vsensebox/issues',
-        'Source': 'https://github.com/numediart/ultralytics-for-vsensebox'},
+    project_urls={'Bug Reports': 'https://github.com/numediart/ultralytics-for-vsensebox/issues',
+                  'Source': 'https://github.com/numediart/ultralytics-for-vsensebox'},
     packages=['ultralytics'] + [str(x) for x in Path('ultralytics').rglob('*/') if x.is_dir() and '__' not in str(x)],
-    package_data={
-        '': ['*.yaml'],
-        'ultralytics.assets': ['*.jpg']},
+    package_data={'ultralytics': ['**/*.yaml', "../tests/*.py"], 'ultralytics.assets': ['*.jpg']},
     include_package_data=True,
     install_requires=parse_requirements(PARENT / 'requirements.txt'),
     extras_require={
@@ -71,6 +68,7 @@ setup(
             "openvino>=2024.0.0", # OpenVINO export
             "tensorflow>=2.0.0", # TF bug https://github.com/ultralytics/ultralytics/issues/5161
             "tensorflowjs>=3.9.0", # TF.js export, automatically installs tensorflow
+            "tensorstore>=0.1.63; platform_machine == 'aarch64' and python_version >= '3.9'",  # for TF Raspberry Pi exports
             "keras",  # not installed automatically by tensorflow>=2.16
             "flatbuffers>=23.5.26,<100; platform_machine == 'aarch64'", # update old 'flatbuffers' included inside tensorflow package
             "h5py!=3.11.0; platform_machine == 'aarch64'", # fix h5py build issues due to missing aarch64 wheels in 3.11 release
