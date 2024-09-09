@@ -2,8 +2,8 @@
 
 # Customized Ultralytics for VSenseBox
 
-* Updated: **August 26, 2024**
-* Synced with: v8.2.82 -> [[0b0bc56]](https://github.com/ultralytics/ultralytics/commit/0b0bc56675997fe66b13aa0d250b777c8a467e32)
+* Updated: **September 9, 2024**
+* Synced with: v8.2.90 -> [[ab8e2c3]](https://github.com/ultralytics/ultralytics/commit/ab8e2c334bdbc05126881c0585df9069e43f0af9)
 * All credit and info -> [[Original Ultralytics repo]](https://github.com/ultralytics/ultralytics)
 * Customized for [`VSenseBox`](https://github.com/numediart/vsensebox):
     - Enable OpenCV multithreading
