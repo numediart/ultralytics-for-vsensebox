@@ -45,7 +45,7 @@ setup(
     version=get_version(),  # version of pypi package
     python_requires='>=3.8',
     license='AGPL-3.0',
-    description=('Ultralytics YOLOv8 for SOTA object detection, multi-object tracking, instance segmentation, '
+    description=('Ultralytics YOLO for SOTA object detection, multi-object tracking, instance segmentation, '
                  'pose estimation and image classification.'),
     long_description=README,
     long_description_content_type='text/markdown',
@@ -103,6 +103,6 @@ setup(
         'Operating System :: POSIX :: Linux',
         'Operating System :: MacOS',
         'Operating System :: Microsoft :: Windows', ],
-    keywords="machine-learning, deep-learning, computer-vision, ML, DL, AI, YOLO, YOLOv3, YOLOv5, YOLOv8, HUB, Ultralytics",
+    keywords="machine-learning, deep-learning, computer-vision, ML, DL, AI, YOLO, YOLOv3, YOLOv5, YOLOv8, YOLOv9, YOLOv10, HUB, Ultralytics",
     entry_points={'console_scripts': ['yolo = ultralytics.cfg:entrypoint', 'ultralytics = ultralytics.cfg:entrypoint']}
 )
