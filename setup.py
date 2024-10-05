@@ -6,7 +6,7 @@ from setuptools import setup
 
 # Settings
 FILE = Path(__file__).resolve()
-PARENT = FILE.parent  # root directory
+PARENT = FILE.parent # root directory
 README = (PARENT / 'README.md').read_text(encoding='utf-8')
 
 
@@ -35,14 +35,14 @@ def parse_requirements(file_path: Path):
     for line in Path(file_path).read_text().splitlines():
         line = line.strip()
         if line and not line.startswith('#'):
-            requirements.append(line.split('#')[0].strip())  # ignore inline comments
+            requirements.append(line.split('#')[0].strip()) # ignore inline comments
 
     return requirements
 
 
 setup(
-    name='vsensebox-ultralytics',  # name of pypi package
-    version=get_version(),  # version of pypi package
+    name='vsensebox-ultralytics', # name of pypi package
+    version=get_version(), # version of pypi package
     python_requires='>=3.8',
     license='AGPL-3.0',
     description=('Ultralytics YOLO for SOTA object detection, multi-object tracking, instance segmentation, '
@@ -68,7 +68,7 @@ setup(
             "openvino>=2024.0.0", # OpenVINO export
             "tensorflow>=2.0.0", # TF bug https://github.com/ultralytics/ultralytics/issues/5161
             "tensorflowjs>=3.9.0", # TF.js export, automatically installs tensorflow
-            "tensorstore>=0.1.63; platform_machine == 'aarch64' and python_version >= '3.9'",  # for TF Raspberry Pi exports
+            "tensorstore>=0.1.63; platform_machine == 'aarch64' and python_version >= '3.9'", # for TF Raspberry Pi exports
             "keras",  # not installed automatically by tensorflow>=2.16
             "flatbuffers>=23.5.26,<100; platform_machine == 'aarch64'", # update old 'flatbuffers' included inside tensorflow package
             "h5py!=3.11.0; platform_machine == 'aarch64'", # fix h5py build issues due to missing aarch64 wheels in 3.11 release
@@ -103,6 +103,6 @@ setup(
         'Operating System :: POSIX :: Linux',
         'Operating System :: MacOS',
         'Operating System :: Microsoft :: Windows', ],
-    keywords="machine-learning, deep-learning, computer-vision, ML, DL, AI, YOLO, YOLOv3, YOLOv5, YOLOv8, YOLOv9, YOLOv10, HUB, Ultralytics",
+    keywords="machine-learning, deep-learning, computer-vision, ML, DL, AI, YOLO, YOLOv3, YOLOv5, YOLOv8, YOLOv9, YOLOv10, YOLO11, HUB, Ultralytics",
     entry_points={'console_scripts': ['yolo = ultralytics.cfg:entrypoint', 'ultralytics = ultralytics.cfg:entrypoint']}
 )
