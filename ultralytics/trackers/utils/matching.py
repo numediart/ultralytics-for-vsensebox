@@ -13,7 +13,7 @@ try:
 except (ImportError, AssertionError, AttributeError):
     from ultralytics.utils.checks import check_requirements
 
-    check_requirements("lapx>=0.5.10")  # update to lap package from https://github.com/rathaROG/lapx
+    check_requirements("lapx>=0.5.11")  # update to lap package from https://github.com/rathaROG/lapx
     import lap
 
 

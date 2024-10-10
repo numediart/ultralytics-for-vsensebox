@@ -1,6 +1,5 @@
 # Ultralytics YOLO 🚀, AGPL-3.0 license
 
-import contextlib
 import glob
 import inspect
 import math
@@ -272,11 +271,13 @@ def check_latest_pypi_version(package_name="vsensebox-ultralytics"):
         (str): The latest version of the package.
     """
     if package_name == 'vsensebox-ultralytics':
-        with contextlib.suppress(Exception):
+        try:
             requests.packages.urllib3.disable_warnings()  # Disable the InsecureRequestWarning
-            response = requests.get(f'https://pypi.org/pypi/{package_name}/json', timeout=3)
+            response = requests.get(f"https://pypi.org/pypi/{package_name}/json", timeout=3)
             if response.status_code == 200:
-                return response.json()['info']['version']
+                return response.json()["info"]["version"]
+        except:  # noqa E722
+            return None
     else:
         LOGGER.info(
         f'This is custom vsensebox-ultralytics for vsensebox 😃 '
@@ -292,7 +293,7 @@ def check_pip_update_available():
         (bool): True if an update is available, False otherwise.
     """
     if ONLINE and IS_PIP_PACKAGE:
-        with contextlib.suppress(Exception):
+        try:
             from ultralytics import __version__
 
             latest = check_latest_pypi_version()
@@ -302,6 +303,8 @@ def check_pip_update_available():
                     f"Update with 'pip install -U vsensebox-ultralytics'"
                 )
                 return True
+        except:  # noqa E722
+            pass
     return False
 
 
@@ -583,10 +586,12 @@ def check_yolo(verbose=True, device=""):
         ram = psutil.virtual_memory().total
         total, used, free = shutil.disk_usage("/")
         s = f"({os.cpu_count()} CPUs, {ram / gib:.1f} GB RAM, {(total - free) / gib:.1f}/{total / gib:.1f} GB disk)"
-        with contextlib.suppress(Exception):  # clear display if ipython is installed
+        try:
             from IPython import display
 
-            display.clear_output()
+            display.clear_output()  # clear display if notebook
+        except ImportError:
+            pass
     else:
         s = ""
 
@@ -625,7 +630,7 @@ def collect_system_info():
     for r in parse_requirements(package="ultralytics"):
         try:
             current = metadata.version(r.name)
-            is_met = "✅ " if check_version(current, str(r.specifier), hard=True) else "❌ "
+            is_met = "✅ " if check_version(current, str(r.specifier), name=r.name, hard=True) else "❌ "
         except metadata.PackageNotFoundError:
             current = "(not installed)"
             is_met = "❌ "
@@ -713,9 +718,10 @@ def check_amp(model):
 
 def git_describe(path=ROOT):  # path must be a directory
     """Return human-readable git description, i.e. v5.0-5-g3e25f1e https://git-scm.com/docs/git-describe."""
-    with contextlib.suppress(Exception):
+    try:
         return subprocess.check_output(f"git -C {path} describe --tags --long --always", shell=True).decode()[:-1]
-    return ""
+    except:  # noqa E722
+        return ""
 
 
 def print_args(args: Optional[dict] = None, show_file=True, show_func=False):
