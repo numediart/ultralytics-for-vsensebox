@@ -277,7 +277,7 @@ def check_latest_pypi_version(package_name="vsensebox-ultralytics"):
             response = requests.get(f"https://pypi.org/pypi/{package_name}/json", timeout=3)
             if response.status_code == 200:
                 return response.json()["info"]["version"]
-        except:  # noqa E722
+        except Exception:  # noqa E722
             return None
     else:
         LOGGER.info(
