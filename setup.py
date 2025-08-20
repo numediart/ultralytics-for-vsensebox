@@ -53,35 +53,44 @@ setup(
     project_urls={'Bug Reports': 'https://github.com/numediart/ultralytics-for-vsensebox/issues',
                   'Source': 'https://github.com/numediart/ultralytics-for-vsensebox'},
     packages=['ultralytics'] + [str(x) for x in Path('ultralytics').rglob('*/') if x.is_dir() and '__' not in str(x)],
-    package_data={'ultralytics': ['**/*.yaml', "../tests/*.py"], 'ultralytics.assets': ['*.jpg']},
+    package_data={'ultralytics': ['**/*.yaml', '**/*.sh', '../tests/*.py'], 'ultralytics.assets': ['*.jpg'], 'ultralytics.solutions.templates': ['*.html']},
     include_package_data=True,
     install_requires=parse_requirements(PARENT / 'requirements.txt'),
     extras_require={
-        'explorer': [
-            "lancedb", # vector search
-            "duckdb<=0.9.2", # SQL queries, duckdb==0.10.0 bug https://github.com/ultralytics/ultralytics/pull/8181
-            "streamlit", # visualizing with GUI
-        ],
         'export': [
-            "onnx>=1.12.0", # ONNX export
-            "coremltools>=7.0; platform_system != 'Windows' and python_version <= '3.11'", # CoreML supported on macOS and Linux
-            "openvino>=2024.0.0", # OpenVINO export
-            "tensorflow>=2.0.0", # TF bug https://github.com/ultralytics/ultralytics/issues/5161
-            "tensorflowjs>=3.9.0", # TF.js export, automatically installs tensorflow
+            "numpy<2.0.0", # TF 2.20 compatibility
+            "onnx>=1.12.0,<1.18.0", # ONNX export
+            "coremltools>=8.0; platform_system != 'Windows' and python_version <= '3.13'", # CoreML supported on macOS and Linux
+            "scikit-learn>=1.3.2; platform_system != 'Windows' and python_version <= '3.13'", # CoreML k-means quantization
+            "openvino>=2024.0.0",  # OpenVINO export
+            "tensorflow>=2.0.0,<=2.19.0", # TF bug https://github.com/ultralytics/ultralytics/issues/5161
+            "tensorflowjs>=2.0.0", # TF.js export, automatically installs tensorflow
             "tensorstore>=0.1.63; platform_machine == 'aarch64' and python_version >= '3.9'", # for TF Raspberry Pi exports
-            "keras",  # not installed automatically by tensorflow>=2.16
-            "flatbuffers>=23.5.26,<100; platform_machine == 'aarch64'", # update old 'flatbuffers' included inside tensorflow package
             "h5py!=3.11.0; platform_machine == 'aarch64'", # fix h5py build issues due to missing aarch64 wheels in 3.11 release
         ],
         'extra': [
             "ipython", # interactive notebook
             "albumentations>=1.4.6", # training augmentations
-            "pycocotools>=2.0.7", # COCO mAP
+            "faster-coco-eval>=1.6.7", # COCO mAP
+        ],
+        'solutions': [
+            "shapely>=2.0.0", # shapely for point and polygon data matching
+            "streamlit>=1.29.0", # for live inference on web browser, i.e `yolo streamlit-predict`
+            "flask>=3.0.1", # for similarity search solution
         ],
         'logging': [
-            "comet", # https://docs.ultralytics.com/integrations/comet/
-            "tensorboard>=2.13.0",
-            "dvclive>=2.12.0",
+            "wandb", # https://docs.ultralytics.com/integrations/weights-biases/
+            "tensorboard", # https://docs.ultralytics.com/integrations/tensorboard/
+            "mlflow", # https://docs.ultralytics.com/integrations/mlflow/
+        ],
+        'typing': [
+            "pandas-stubs",
+            "scipy-stubs",
+            "types-pillow",
+            "types-psutil",
+            "types-pyyaml",
+            "types-requests",
+            "types-shapely",
         ]
     },
     classifiers=[
