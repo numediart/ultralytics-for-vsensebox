@@ -13,7 +13,7 @@ try:
 except (ImportError, AssertionError, AttributeError):
     from ultralytics.utils.checks import check_requirements
 
-    check_requirements("lapx>=0.5.11")  # https://github.com/rathaROG/lapx
+    check_requirements("lapx>=0.5.12")  # https://github.com/rathaROG/lapx
     import lap
 
 
@@ -41,7 +41,7 @@ def linear_assignment(cost_matrix: np.ndarray, thresh: float, use_lap: bool = Tr
 
     if use_lap:
         # Use lap.lapjv
-        # https://github.com/gatagat/lap
+        # https://github.com/rathaROG/lapx
         _, x, y = lap.lapjv(cost_matrix, extend_cost=True, cost_limit=thresh)
         matches = [[ix, mx] for ix, mx in enumerate(x) if mx >= 0]
         unmatched_a = np.where(x < 0)[0]
@@ -66,8 +66,8 @@ def iou_distance(atracks: list, btracks: list) -> np.ndarray:
     Compute cost based on Intersection over Union (IoU) between tracks.
 
     Args:
-        atracks (List[STrack] | List[np.ndarray]): List of tracks 'a' or bounding boxes.
-        btracks (List[STrack] | List[np.ndarray]): List of tracks 'b' or bounding boxes.
+        atracks (list[STrack] | list[np.ndarray]): List of tracks 'a' or bounding boxes.
+        btracks (list[STrack] | list[np.ndarray]): List of tracks 'b' or bounding boxes.
 
     Returns:
         (np.ndarray): Cost matrix computed based on IoU with shape (len(atracks), len(btracks)).
@@ -106,8 +106,8 @@ def embedding_distance(tracks: list, detections: list, metric: str = "cosine") -
     Compute distance between tracks and detections based on embeddings.
 
     Args:
-        tracks (List[STrack]): List of tracks, where each track contains embedding features.
-        detections (List[BaseTrack]): List of detections, where each detection contains embedding features.
+        tracks (list[STrack]): List of tracks, where each track contains embedding features.
+        detections (list[BaseTrack]): List of detections, where each detection contains embedding features.
         metric (str): Metric for distance computation. Supported metrics include 'cosine', 'euclidean', etc.
 
     Returns:
@@ -137,7 +137,7 @@ def fuse_score(cost_matrix: np.ndarray, detections: list) -> np.ndarray:
 
     Args:
         cost_matrix (np.ndarray): The matrix containing cost values for assignments, with shape (N, M).
-        detections (List[BaseTrack]): List of detections, each containing a score attribute.
+        detections (list[BaseTrack]): List of detections, each containing a score attribute.
 
     Returns:
         (np.ndarray): Fused similarity matrix with shape (N, M).
