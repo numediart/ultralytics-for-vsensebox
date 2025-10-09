@@ -17,7 +17,7 @@ from ultralytics.models import yolo
 from ultralytics.nn.tasks import DetectionModel
 from ultralytics.utils import DEFAULT_CFG, LOGGER, RANK
 from ultralytics.utils.patches import override_configs
-from ultralytics.utils.plotting import plot_images, plot_labels, plot_results
+from ultralytics.utils.plotting import plot_images, plot_labels
 from ultralytics.utils.torch_utils import torch_distributed_zero_first, unwrap_model
 
 
@@ -43,7 +43,6 @@ class DetectionTrainer(BaseTrainer):
         label_loss_items: Return a loss dictionary with labeled training loss items.
         progress_string: Return a formatted string of training progress.
         plot_training_samples: Plot training samples with their annotations.
-        plot_metrics: Plot metrics from a CSV file.
         plot_training_labels: Create a labeled training plot of the YOLO model.
         auto_batch: Calculate optimal batch size based on model memory requirements.
 
@@ -64,7 +63,6 @@ class DetectionTrainer(BaseTrainer):
             _callbacks (list, optional): List of callback functions to be executed during training.
         """
         super().__init__(cfg, overrides, _callbacks)
-        self.dynamic_tensors = ["batch_idx", "cls", "bboxes"]
 
     def build_dataset(self, img_path: str, mode: str = "train", batch: int | None = None):
         """
@@ -122,7 +120,7 @@ class DetectionTrainer(BaseTrainer):
         """
         for k, v in batch.items():
             if isinstance(v, torch.Tensor):
-                batch[k] = v.to(self.device, non_blocking=True)
+                batch[k] = v.to(self.device, non_blocking=self.device.type == "cuda")
         batch["img"] = batch["img"].float() / 255
         if self.args.multi_scale:
             imgs = batch["img"]
@@ -138,10 +136,6 @@ class DetectionTrainer(BaseTrainer):
                 ]  # new shape (stretched to gs-multiple)
                 imgs = nn.functional.interpolate(imgs, size=ns, mode="bilinear", align_corners=False)
             batch["img"] = imgs
-
-        if self.args.compile:
-            for k in self.dynamic_tensors:
-                torch._dynamo.maybe_mark_dynamic(batch[k], 0)
         return batch
 
     def set_model_attributes(self):
@@ -221,10 +215,6 @@ class DetectionTrainer(BaseTrainer):
             fname=self.save_dir / f"train_batch{ni}.jpg",
             on_plot=self.on_plot,
         )
-
-    def plot_metrics(self):
-        """Plot metrics from a CSV file."""
-        plot_results(file=self.csv, on_plot=self.on_plot)  # save results.png
 
     def plot_training_labels(self):
         """Create a labeled training plot of the YOLO model."""
