@@ -6,7 +6,7 @@ Pillow>=7.1.2
 PyYAML>=5.3.1
 requests>=2.23.0
 scipy>=1.4.1
-psutil # system utilization
-polars
-ultralytics-thop>=2.0.0 # FLOPs computation https://github.com/ultralytics/thop
+psutil>=5.8.0, # system utilization
+polars>=0.20.0,
+ultralytics-thop>=2.0.18 # FLOPs computation https://github.com/ultralytics/thop
 hub-sdk>=0.0.12 # Ultralytics HUB

@@ -60,16 +60,18 @@ setup(
         'export': [
             "numpy<2.0.0", # TF 2.20 compatibility
             "onnx>=1.12.0; platform_system != 'Darwin'", # ONNX export
-            "onnx>=1.12.0,<1.18.0; platform_system == 'Darwin'",  # TF inference hanging on MacOS
-            "coremltools>=8.0; platform_system != 'Windows' and python_version <= '3.13'", # CoreML supported on macOS and Linux
+            "onnx>=1.12.0,<1.18.0; platform_system == 'Darwin'", # TF inference hanging on MacOS (tested up to onnx==1.20.0)
+            "onnxslim>=0.1.82",
+            "coremltools>=9.0; platform_system != 'Windows' and python_version <= '3.13'", # CoreML supported on macOS and Linux
             "scikit-learn>=1.3.2; platform_system != 'Windows' and python_version <= '3.13'", # CoreML k-means quantization
-            "openvino>=2024.0.0",  # OpenVINO export
+            "openvino>=2024.0.0", # OpenVINO export
             "tensorflow>=2.0.0,<=2.19.0", # TF bug https://github.com/ultralytics/ultralytics/issues/5161
             "tensorflowjs>=2.0.0", # TF.js export, automatically installs tensorflow
             "tensorstore>=0.1.63; platform_machine == 'aarch64' and python_version >= '3.9'", # for TF Raspberry Pi exports
             "h5py!=3.11.0; platform_machine == 'aarch64'", # fix h5py build issues due to missing aarch64 wheels in 3.11 release
         ],
         'extra': [
+            "hub-sdk>=0.0.12", # Ultralytics HUB
             "ipython", # interactive notebook
             "albumentations>=1.4.6", # training augmentations
             "faster-coco-eval>=1.6.7", # COCO mAP
@@ -85,7 +87,7 @@ setup(
             "mlflow", # https://docs.ultralytics.com/integrations/mlflow/
         ],
         'typing': [
-            "scipy-stubs",
+            "scipy-stubs>=1.14.1.4; python_version >= '3.10'",
             "types-pillow",
             "types-psutil",
             "types-pyyaml",
