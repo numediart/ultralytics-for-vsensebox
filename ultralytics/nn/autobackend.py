@@ -132,14 +132,14 @@ class AutoBackend(nn.Module):
         _model_type: Determine the model type from file path.
 
     Examples:
-        >>> model = AutoBackend(model="yolo11n.pt", device="cuda")
+        >>> model = AutoBackend(model="yolo26n.pt", device="cuda")
         >>> results = model(img)
     """
 
     @torch.no_grad()
     def __init__(
         self,
-        model: str | torch.nn.Module = "yolo11n.pt",
+        model: str | torch.nn.Module = "yolo26n.pt",
         device: torch.device = torch.device("cpu"),
         dnn: bool = False,
         data: str | Path | None = None,
@@ -221,6 +221,7 @@ class AutoBackend(nn.Module):
             for p in model.parameters():
                 p.requires_grad = False
             self.model = model  # explicitly assign for to(), cpu(), cuda(), half()
+            end2end = getattr(model, "end2end", False)
 
         # TorchScript
         elif jit:
@@ -545,8 +546,7 @@ class AutoBackend(nn.Module):
         # NCNN
         elif ncnn:
             LOGGER.info(f"Loading {w} for NCNN inference...")
-            # use git source for ARM64 due to broken PyPI packages https://github.com/Tencent/ncnn/issues/6509
-            check_requirements("git+https://github.com/Tencent/ncnn.git" if ARM64 else "ncnn", cmds="--no-deps")
+            check_requirements("ncnn", cmds="--no-deps")
             import ncnn as pyncnn
 
             net = pyncnn.Net()
@@ -648,7 +648,7 @@ class AutoBackend(nn.Module):
             for k, v in metadata.items():
                 if k in {"stride", "batch", "channels"}:
                     metadata[k] = int(v)
-                elif k in {"imgsz", "names", "kpt_shape", "kpt_names", "args"} and isinstance(v, str):
+                elif k in {"imgsz", "names", "kpt_shape", "kpt_names", "args", "end2end"} and isinstance(v, str):
                     metadata[k] = ast.literal_eval(v)
             stride = metadata["stride"]
             task = metadata["task"]
@@ -657,7 +657,7 @@ class AutoBackend(nn.Module):
             names = metadata["names"]
             kpt_shape = metadata.get("kpt_shape")
             kpt_names = metadata.get("kpt_names")
-            end2end = metadata.get("args", {}).get("nms", False)
+            end2end = metadata.get("end2end", False) or metadata.get("args", {}).get("nms", False)
             dynamic = metadata.get("args", {}).get("dynamic", dynamic)
             ch = metadata.get("channels", 3)
         elif not (pt or triton or nn_module):
@@ -887,7 +887,7 @@ class AutoBackend(nn.Module):
                                 x[:, 6::3] *= h
                     y.append(x)
             # TF segment fixes: export is reversed vs ONNX export and protos are transposed
-            if len(y) == 2:  # segment with (det, proto) output order reversed
+            if self.task == "segment":  # segment with (det, proto) output order reversed
                 if len(y[1].shape) != 4:
                     y = list(reversed(y))  # should be y = (1, 116, 8400), (1, 160, 160, 32)
                 if y[1].shape[-1] == 6:  # end-to-end model
